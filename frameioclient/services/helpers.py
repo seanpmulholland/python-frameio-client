@@ -40,7 +40,7 @@ class FrameioHelpers(Service):
         assets = self.client.assets.get_children(asset_id, slim=slim)
         print("Number of assets at top level", len(assets))
 
-        for asset in assets:
+        for index, asset in enumerate(assets):
             # try:
             print(
                 f"Type: {asset['_type']}, Name: {asset['name']}, Children: {len(asset['children'])}"
@@ -57,7 +57,7 @@ class FrameioHelpers(Service):
             if asset["_type"] == "version_stack":
                 print("Grabbing top item from version stack")
                 versions = self.client.assets.get_children(asset["id"], slim=True)
-                asset = versions[0]  # re-assign on purpose
+                assets[index]['children'] = versions # re-assign on purpose
                 continue
 
             # We only get the first three items when we use "include=children"
@@ -97,10 +97,8 @@ class FrameioHelpers(Service):
         project = self.client.projects.get(project_id)
         initial_tree = self.get_assets_recursively(project["root_asset_id"])
         self.recursive_downloader(destination, initial_tree)
-        # pprint(initial_tree)
-        # print(f"Downloading {Utils.format_bytes(total_bytes, type='size')}")
 
-    def recursive_downloader(self, directory, asset, count=0):
+    def recursive_downloader(self, directory, asset, manifest=[]):
         print(f"Directory {directory}")
 
         try:
@@ -121,7 +119,7 @@ class FrameioHelpers(Service):
             try:
                 if asset["_type"] == "folder":
                     if len(asset["children"]) >= 0:
-                        count += 1
+                        # count += 1
                         # Create the new folder that these items will go in before it's too late
                         if not os.path.exists(
                             os.path.join(target_directory, asset["name"])
@@ -139,17 +137,25 @@ class FrameioHelpers(Service):
                         self.recursive_downloader(
                             f"{directory}/{str(asset['name']).replace('/', '-')}",
                             asset["children"],
+                            manifest
                         )
 
                 if asset["_type"] == "file":
-                    count += 1
-                    return self.client.assets.download(
+                    # count += 1
+                    fn = self.client.assets.download(
                         asset, target_directory, multi_part=True
                     )
+                    manifest.append({
+                        "asset_id": asset['id'],
+                        "file_path": fn,
+                        "directory": target_directory
+                    })
+
 
             except Exception as e:
                 print(e)
 
+        pprint(manifest)
         return True
 
 

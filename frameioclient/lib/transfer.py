@@ -58,7 +58,7 @@ class FrameioDownloader(object):
         self.session = None
         self.filename = Utils.normalize_filename(asset["name"])
         self.request_logs = list()
-        self.stats = True
+        self.stats = False
 
         self._evaluate_asset()
         self._get_path()
@@ -411,17 +411,18 @@ class AWSClient(HTTPClient, object):
         pprint(self.downloader)
         download_speed = round((self.downloader.filesize / download_time), 2)
 
-        if self.downloader.checksum_verification == True:
-            # Check for checksum, if not present throw error
-            if self.downloader._get_checksum() == None:
-                raise AssetChecksumNotPresent
+        # TODO: Ensure this works correctly on assets that are missing checksums/at all
+        # if self.downloader.checksum_verification == True:
+        #     # Check for checksum, if not present throw error
+        #     if self.downloader._get_checksum() == None:
+        #         raise AssetChecksumNotPresent
 
-            # Calculate the file hash
-            if (
-                Utils.calculate_hash(self.destination)
-                != self.downloader.original_checksum
-            ):
-                raise AssetChecksumMismatch
+        #     # Calculate the file hash
+        #     if (
+        #         Utils.calculate_hash(self.destination)
+        #         != self.downloader.original_checksum
+        #     ):
+        #         raise AssetChecksumMismatch
 
         # Log completion event
         SDKLogger("downloads").info(

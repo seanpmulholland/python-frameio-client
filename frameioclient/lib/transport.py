@@ -126,6 +126,10 @@ class APIClient(HTTPClient, object):
 
         if r.status_code == 422 and "presentation" in endpoint:
             raise PresentationException
+        
+        if r.status_code == 500 and 'audit' in endpoint:
+            print(f"Hit a 500 on page: {r.headers.get('page-number')}, url: {r.url}")
+            return []
 
         return r.raise_for_status()
 

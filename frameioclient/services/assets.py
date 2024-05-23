@@ -138,6 +138,7 @@ class Asset(Service):
             "type": type,
             "filesize": filesize,
             "filetype": filetype,
+            "properties": {"reference_id": "7eaa2f13-1202-42b3-a360-9d21e9a9efa7"},
         }
 
         endpoint = "/assets/{}/children".format(parent_asset_id)
@@ -356,6 +357,10 @@ class Asset(Service):
                 except Exception as e:
                     print(e)
 
+            else:
+                with open(file_info["filepath"], "rb") as fp:
+                    self._upload(asset, fp)
+
         return asset
 
     def download(
@@ -393,7 +398,7 @@ class Asset(Service):
 
         Example::
 
-            client.assets.upload("./file.mov", "1231-12414-afasfaf-aklsajflaksjfla")
+              client.assets.upload("./file.mov", "1231-12414-afasfaf-aklsajflaksjfla")
           """
 
         # Check if destination is a project or folder
