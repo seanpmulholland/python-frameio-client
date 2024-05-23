@@ -1,14 +1,11 @@
 from ..client import FrameioClient
-from ..lib.bandwidth import NetworkBandwidth
-
 
 class Service(object):
     def __init__(self, client: FrameioClient):
         self.client = client
         self.concurrency = 10
-        self.bandwidth = NetworkBandwidth()
 
-        # Auto-configure afterwards
+        # Run auto-configure afterwards
         self.autoconfigure()
 
     def autoconfigure(self):

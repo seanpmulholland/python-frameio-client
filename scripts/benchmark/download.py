@@ -4,8 +4,6 @@ import sys
 from utils import timefunc
 import frameioclient
 
-from frameioclient.lib.bandwidth import NetworkBandwidth
-
 
 def download(
     asset_id: str = "",

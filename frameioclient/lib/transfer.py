@@ -18,7 +18,6 @@ from .utils import FormatTypes, Utils
 
 logger = SDKLogger("downloads")
 
-from .bandwidth import DiskBandwidth, NetworkBandwidth
 from .exceptions import (
     AssetNotFullyUploaded,
     DownloadException,
@@ -246,13 +245,6 @@ class AWSClient(HTTPClient, object):
         Example::
             AWSClient._optimize_concurrency()
         """
-
-        net_stats = NetworkBandwidth
-        disk_stats = DiskBandwidth
-
-        # Algorithm ensues
-        #
-        #
 
         return 5
 
