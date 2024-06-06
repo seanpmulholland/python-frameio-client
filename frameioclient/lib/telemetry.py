@@ -13,7 +13,6 @@ analytics.write_key = segment_id
 class Telemetry(object):
     def __init__(self, user_id):
         self.user_id = user_id
-        self.speedtest = None
         self.identity = None
         self.context = None
         self.integrations = {"all": False, "Amplitude": True}

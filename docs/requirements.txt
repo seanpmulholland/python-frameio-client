@@ -8,6 +8,5 @@ xxhash
 furo
 analytics-python
 token-bucket
-speedtest-cli
 sphinx-autobuild
 sphinx-autodoc-typehints
