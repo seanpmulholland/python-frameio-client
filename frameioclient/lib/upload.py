@@ -104,7 +104,6 @@ class FrameioUploader(object):
             for future in concurrent.futures.as_completed(self.futures):
                 try:
                     chunk_size = future.result()
-                    print(chunk_size)
                 except Exception as exc:
                     print(exc)
 
