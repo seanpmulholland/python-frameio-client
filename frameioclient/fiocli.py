@@ -1,3 +1,4 @@
+import json
 import os
 import sys
 import argparse
@@ -83,7 +84,10 @@ def main():
                             args.target[0], args.destination[0]
                         )
                     else:
-                        return client.assets.upload(args.destination[0], args.target[0])
+                        try:
+                            return json.dumps(client.assets.upload(args.destination[0], args.target[0]))
+                        except Exception as e:
+                            print(e)
             else:
                 print("No destination supplied")
         else:
